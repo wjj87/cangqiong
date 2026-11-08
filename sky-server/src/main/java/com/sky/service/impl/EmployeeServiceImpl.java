@@ -118,6 +118,29 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
 
+    @Override
+    public Employee getById(Long id) {
+        Employee employee = employeeMapper.getById(id);
+        //进一步加强安全性
+        employee.setPassword("****");
+        return employee;
+    }
+
+    /**
+     * 更新员工数据
+     * @param employeeDTO
+     */
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        //因为每次都会经过拦截器，用户id被放在了拦截器本次线程里面
+        employee.setUpdateUser(BaseContext.getCurrentId());
+
+        employeeMapper.update(employee);
+    }
+
     /**
      * 实现分页查询
      * @param employeePageQueryDTO
@@ -131,4 +154,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return new PageResult(page.getTotal(),page.getResult());
     }
+
+
 }
