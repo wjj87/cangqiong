@@ -70,6 +70,25 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
+     * 启动或者禁止使用员工账号
+     * @param status
+     * @param id
+     */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        //本质就是修改员工表里面status的值
+//        Employee employee = new Employee();
+//        employee.setId(id);
+//        employee.setStatus(status);
+
+        Employee employee = Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
+        employeeMapper.update(employee);
+    }
+
+    /**
      * 新增员工
      * @param employeeDTO
      */
